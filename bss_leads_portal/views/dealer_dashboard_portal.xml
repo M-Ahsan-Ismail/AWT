@@ -1,0 +1,722 @@
+<odoo>
+    <template id="dashboard_controller_dms_id" name="Portal My Home: DashBoard View" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[contains(@class, 'o_portal_docs')]" position="inside">
+            <div class="o_portal_docs">
+                <div class="card o_portal_doc_entry border-0 shadow-sm modern-dashboard-card"
+                     style="max-width: 420px; height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; border-radius: 20px !important; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; border: none !important;">
+
+                    <!-- Animated Background Pattern -->
+                    <div class="card-pattern"
+                         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.1; background-image: radial-gradient(circle at 20% 50%, white 2px, transparent 2px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px); background-size: 30px 30px, 20px 20px;"></div>
+
+                    <!-- Floating Dashboard Icon -->
+                    <div class="dashboard-icon-wrapper"
+                         style="position: absolute; top: 16px; right: 16px; width: 48px; height: 48px; background: rgba(255, 255, 255, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); transition: all 0.3s ease;">
+                        <i class="fas fa-chart-pie" style="color: white; font-size: 20px; opacity: 0.9;"></i>
+                    </div>
+
+                    <!-- Clickable Link -->
+                    <a t-att-href="'/admin/leads/dashboard'"
+                       class="text-decoration-none d-block h-100 position-relative" style="z-index: 2;">
+                        <div class="card-body d-flex flex-column justify-content-center p-4">
+                            <!-- Main Content -->
+                            <div class="dashboard-content">
+                                <!-- Title with Icon -->
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="title-icon me-3"
+                                         style="width: 12px; height: 12px; background: rgba(255, 255, 255, 0.8); border-radius: 50%; animation: pulse 2s infinite;"></div>
+                                    <h4 class="mb-0 dashboard-title"
+                                        style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 700; font-size: 22px; color: #FFFFFF; letter-spacing: -0.5px; line-height: 1.2;">
+                                        CRM Dashboard
+                                    </h4>
+                                </div>
+
+                                <!-- Subtitle with Enhanced Styling -->
+                                <p class="mb-2 dashboard-subtitle"
+                                   style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: rgba(255, 255, 255, 0.8); margin-left: 24px;">
+                                    Admin Overview &amp; Analytics
+                                </p>
+
+                                <!-- Action Indicator -->
+                                <div class="action-indicator d-flex align-items-center" style="margin-left: 24px;">
+                                    <span style="font-size: 12px; color: rgba(255, 255, 255, 0.7); font-weight: 500;">
+                                        View Dashboard
+                                    </span>
+                                    <i class="fas fa-arrow-right ms-2"
+                                       style="color: rgba(255, 255, 255, 0.7); font-size: 12px; transition: transform 0.3s ease;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Hover Shine Effect -->
+                    <div class="shine-effect"
+                         style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transition: left 0.6s ease; pointer-events: none;"></div>
+                </div>
+            </div>
+        </xpath>
+
+        <!-- Enhanced CSS for Modern Design -->
+        <xpath expr="." position="inside">
+            <style>
+                /* Force override Odoo's default card styles */
+                .modern-dashboard-card.card {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                    background-color: transparent !important;
+                    border: none !important;
+                    border-radius: 20px !important;
+                }
+
+                .modern-dashboard-card .card-body {
+                    background: transparent !important;
+                    background-color: transparent !important;
+                }
+
+                .modern-dashboard-card {
+                    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                    cursor: pointer;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                }
+
+                .modern-dashboard-card:hover {
+                    transform: translateY(-8px) scale(1.02);
+                    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3) !important;
+                }
+
+                .modern-dashboard-card:hover .shine-effect {
+                    left: 100%;
+                }
+
+                .modern-dashboard-card:hover .dashboard-icon-wrapper {
+                    transform: rotate(10deg) scale(1.1);
+                    background: rgba(255, 255, 255, 0.25);
+                }
+
+                .modern-dashboard-card:hover .action-indicator i {
+                    transform: translateX(4px);
+                }
+
+                .dashboard-title {
+                    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .dashboard-subtitle {
+                    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+                }
+
+                @keyframes pulse {
+                    0%, 100% {
+                        opacity: 0.8;
+                        transform: scale(1);
+                    }
+                    50% {
+                        opacity: 1;
+                        transform: scale(1.2);
+                    }
+                }
+
+                /* Responsive Design */
+                @media (max-width: 768px) {
+                    .modern-dashboard-card {
+                        max-width: 100% !important;
+                        height: 120px !important;
+                    }
+
+                    .dashboard-title {
+                        font-size: 20px !important;
+                    }
+
+                    .dashboard-subtitle {
+                        font-size: 13px !important;
+                    }
+                }
+
+                /* Loading Animation */
+                .card-pattern {
+                    animation: float 6s ease-in-out infinite;
+                }
+
+                @keyframes float {
+                    0%, 100% {
+                        transform: translateY(0px);
+                    }
+                    50% {
+                        transform: translateY(-2px);
+                    }
+                }
+
+                /* Override any Bootstrap or Odoo card defaults */
+                .o_portal_docs .card.modern-dashboard-card {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                    background-color: transparent !important;
+                }
+
+                .o_portal_docs .modern-dashboard-card * {
+                    background-color: transparent !important;
+                }
+
+                /* Accessibility */
+                .modern-dashboard-card:focus-within {
+                    outline: 3px solid rgba(255, 255, 255, 0.5);
+                    outline-offset: 2px;
+                }
+            </style>
+        </xpath>
+    </template>
+
+
+    <template id="crm_leads_admin_dashboard_id" name="CRM Dashboard">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_portal_wrap">
+                <!-- External CSS Dependencies -->
+                <link rel="stylesheet"
+                      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+                <!-- Updated CSS with Soft Rounded Design -->
+                <style>
+                    :root {
+                        --primary-color: #4776E6;
+                        --secondary-color: #8E54E9;
+                        --success-color: #28a745;
+                        --info-color: #17a2b8;
+                        --warning-color: #ffc107;
+                        --danger-color: #dc3545;
+                        --border-radius: 16px;
+                        --border-radius-lg: 20px;
+                        --border-radius-pill: 50px;
+                        --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+                        --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.08);
+                        --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+                    }
+
+                    body {
+                        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                        background: #f8f9fc;
+                    }
+
+                    .text-gradient {
+                        background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
+
+                    .card {
+                        border-radius: var(--border-radius);
+                        border: none;
+                        box-shadow: var(--shadow-sm);
+                        transition: all 0.3s ease;
+                        overflow: hidden;
+                    }
+
+                    .card:hover {
+                        box-shadow: var(--shadow-md);
+                        transform: translateY(-2px);
+                    }
+
+                    .rounded-lg {
+                        border-radius: var(--border-radius-lg) !important;
+                    }
+
+                    .rounded-pill {
+                        border-radius: var(--border-radius-pill) !important;
+                    }
+
+                    .stat-card {
+                        transition: transform 0.3s ease;
+                        overflow: hidden;
+                    }
+
+                    .stat-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: var(--shadow-lg);
+                    }
+
+                    .stat-icon {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 12px;
+                        color: white;
+                        font-size: 1.2rem;
+                    }
+
+                    .stat-title {
+                        color: #6c757d;
+                        font-size: 0.9rem;
+                        margin-bottom: 0.25rem;
+                        font-weight: 500;
+                    }
+
+                    .stat-value {
+                        font-weight: 700;
+                        font-size: 1.8rem;
+                        color: #2d3748;
+                    }
+
+                    .form-control, .form-select {
+                        border: 2px solid #e9ecef;
+                        border-radius: var(--border-radius-pill);
+                        padding: 0.75rem 1.25rem;
+                        font-size: 0.95rem;
+                        transition: all 0.3s ease;
+                        background: white;
+                    }
+
+                    .form-control:focus, .form-select:focus {
+                        border-color: var(--primary-color);
+                        box-shadow: 0 0 0 0.2rem rgba(71, 118, 230, 0.15);
+                        outline: none;
+                    }
+
+                    .btn {
+                        border-radius: var(--border-radius-pill);
+                        font-weight: 600;
+                        padding: 0.75rem 1.5rem;
+                        transition: all 0.3s ease;
+                        border: none;
+                    }
+
+                    .btn:hover {
+                        transform: translateY(-2px);
+                        box-shadow: var(--shadow-md);
+                    }
+
+                    .btn-primary {
+                        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+                    }
+
+                    .btn-outline-secondary {
+                        border: 2px solid #e9ecef;
+                        color: #6c757d;
+                        background: white;
+                    }
+
+                    .btn-outline-secondary:hover {
+                        background: #f8f9fa;
+                        border-color: #dee2e6;
+                        color: #495057;
+                    }
+
+                    .applicant-avatar {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 40px;
+                        height: 40px;
+                        overflow: hidden;
+                    }
+
+                    .avatar-placeholder {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 40px;
+                        height: 40px;
+                        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                        color: white;
+                        border-radius: 50%;
+                        font-size: 1rem;
+                        box-shadow: var(--shadow-sm);
+                    }
+
+                    .table {
+                        border-radius: var(--border-radius);
+                        overflow: hidden;
+                    }
+
+                    .table > :not(caption) > * > * {
+                        padding: 1rem 0.75rem;
+                        border-bottom: 1px solid #f1f3f4;
+                    }
+
+                    .table thead th {
+                        background: #f8f9fc;
+                        border: none;
+                        font-weight: 600;
+                        color: #4a5568;
+                        font-size: 0.9rem;
+                    }
+
+                    .table tbody tr {
+                        transition: all 0.2s ease;
+                    }
+
+                    .table tbody tr:hover {
+                        background: rgba(71, 118, 230, 0.05);
+                        transform: scale(1.002);
+                    }
+
+                    .badge {
+                        border-radius: var(--border-radius-pill);
+                        padding: 0.5rem 1rem;
+                        font-weight: 500;
+                        font-size: 0.8rem;
+                    }
+
+                    .empty-state {
+                        padding: 3rem 2rem;
+                        text-align: center;
+                        color: #6c757d;
+                    }
+
+                    .empty-state i {
+                        animation: pulse 2s infinite;
+                    }
+
+                    @keyframes pulse {
+                        0%, 100% {
+                            opacity: 0.5;
+                        }
+                        50% {
+                            opacity: 1;
+                        }
+                    }
+
+                    .table-responsive::-webkit-scrollbar {
+                        height: 8px;
+                    }
+
+                    .table-responsive::-webkit-scrollbar-track {
+                        background: #f1f3f4;
+                        border-radius: 10px;
+                    }
+
+                    .table-responsive::-webkit-scrollbar-thumb {
+                        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+                        border-radius: 10px;
+                    }
+
+                    .table-responsive::-webkit-scrollbar-thumb:hover {
+                        background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+                    }
+
+                    @media (max-width: 768px) {
+                        .stat-card {
+                            margin-bottom: 1rem;
+                        }
+
+                        .card-body {
+                            padding: 1.5rem;
+                        }
+                    }
+                </style>
+
+                <!-- Fixed JavaScript -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                    console.log('Dashboard loaded');
+
+                    const form = document.getElementById('filter-form');
+                    if (form) {
+                    console.log('Form found');
+
+                    form.addEventListener('submit', function(e) {
+                    console.log('Form submit triggered');
+
+                    // Get form data
+                    const formData = new FormData(form);
+                    const params = new URLSearchParams();
+
+                    // Build query parameters
+                    for (let [key, value] of formData.entries()) {
+                    if (value &amp;&amp; value.trim() !== '') {
+                    params.append(key, value);
+                    console.log(`Adding parameter: ${key} = ${value}`);
+                    }
+                    }
+
+                    // Construct URL
+                    const baseUrl = '/admin/leads/dashboard';
+                    const queryString = params.toString();
+                    const finalUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
+
+                    console.log('Redirecting to:', finalUrl);
+
+                    // Redirect to the new URL
+                    window.location.href = finalUrl;
+
+                    // Prevent default form submission
+                    e.preventDefault();
+                    return false;
+                    });
+                    } else {
+                    console.error('Form not found!');
+                    }
+
+                    // Add change event listeners for debugging
+                    const inputs = form.querySelectorAll('input, select');
+                    inputs.forEach(input => {
+                    input.addEventListener('change', function() {
+                    console.log(`${this.name} changed to: ${this.value}`);
+                    });
+                    });
+                    });
+                </script>
+
+                <!-- Main Content -->
+                <div class="container mt-4">
+                    <!-- Header Section -->
+                    <div class="row mb-4">
+                        <div class="col-lg-12">
+                            <div class="card shadow-sm border-0 rounded-lg">
+                                <div class="card-body p-4 bg-primary text-white">
+                                    <h1 class="card-title mb-0 text-white fw-bold">
+                                        <a href="/admin/leads/dashboard"
+                                           class="navbar-brand text-white text-decoration-none">
+                                            <span></span>Leads &amp; Opportunities Dashboard
+                                        </a>
+                                    </h1>
+                                    <p class="text-white-50 mb-0">View leads and opportunities</p>
+                                </div>
+
+                                <!-- Filter Controls -->
+                                <form action="/admin/leads/dashboard" method="GET"
+                                      class="row g-3 align-items-end mt-3 p-4" id="filter-form">
+                                    <div class="col-md-2">
+                                        <label class="form-label fw-semibold">Select Salesperson</label>
+                                        <select name="sales_person" class="form-select rounded-pill">
+                                            <option value="">All Salespersons</option>
+                                            <t t-foreach="res_users" t-as="user">
+                                                <option t-att-value="user['id']"
+                                                        t-att-selected="kwargs.get('sales_person') == str(user['id']) and 'selected' or None">
+                                                    <t t-esc="user['name']"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label fw-semibold">Start Date</label>
+                                        <input type="date" name="start_date" class="form-control rounded-pill"
+                                               t-att-value="kwargs.get('start_date', '')"/>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label fw-semibold">End Date</label>
+                                        <input type="date" name="end_date" class="form-control rounded-pill"
+                                               t-att-value="kwargs.get('end_date', '')"/>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label fw-semibold">Filter by Type</label>
+                                        <select name="type" class="form-select rounded-pill">
+                                            <option value=""
+                                                    t-att-selected="not kwargs.get('type') and 'selected' or None">
+                                                All Types
+                                            </option>
+                                            <option value="lead"
+                                                    t-att-selected="kwargs.get('type') == 'lead' and 'selected' or None">
+                                                Lead
+                                            </option>
+                                            <option value="opportunity"
+                                                    t-att-selected="kwargs.get('type') == 'opportunity' and 'selected' or None">
+                                                Opportunity
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4 d-flex align-items-end gap-2">
+                                        <button type="submit" class="btn btn-primary rounded-pill flex-grow-1">
+                                            <i class="fa fa-filter me-2"></i>Filter
+                                        </button>
+                                        <a href="/admin/leads/dashboard" class="btn btn-outline-secondary rounded-pill">
+                                            <i class="fa fa-refresh me-1"></i>Reset
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="card border-0 shadow-sm rounded-lg h-100 stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stat-icon bg-primary">
+                                            <i class="fa fa-file-alt"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="stat-title">Leads</h6>
+                                            <h3 class="stat-value mb-0">
+                                                <t t-esc="len([x for x in leads_opportunity_list if x.get('type') == 'lead'])"/>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="card border-0 shadow-sm rounded-lg h-100 stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stat-icon bg-success">
+                                            <i class="fa fa-check-circle"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="stat-title">Opportunities</h6>
+                                            <h3 class="stat-value mb-0">
+                                                <t t-esc="len([x for x in leads_opportunity_list if x.get('type') == 'opportunity'])"/>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="card border-0 shadow-sm rounded-lg h-100 stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stat-icon"
+                                             style="background: linear-gradient(135deg, #17a2b8, #20c997);">
+                                            <i class="fa fa-dollar-sign"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="stat-title">Expected Revenue</h6>
+                                            <h3 class="stat-value mb-0">
+                                                $<t t-esc="'{:,.0f}'.format(sum(float(x.get('expected_revenue', 0)) for x in leads_opportunity_list))"/>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="card border-0 shadow-sm rounded-lg h-100 stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stat-icon"
+                                             style="background: linear-gradient(135deg, #ffc107, #fd7e14);">
+                                            <i class="fa fa-chart-line"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="stat-title">Deals in View</h6>
+                                            <h3 class="stat-value mb-0">
+                                                <t t-esc="len(leads_opportunity_list)"/>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Display Section -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card border-0 shadow-sm rounded-lg">
+                                <div class="card-header bg-transparent border-0 p-4">
+                                    <h4 class="mb-1 fw-bold">CRM Records</h4>
+                                    <p class="text-muted mb-0 small">Showing <t t-esc="len(leads_opportunity_list)"/>
+                                        records</p>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="ps-4">Contact</th>
+                                                    <th>Opportunity</th>
+                                                    <th>Description</th>
+                                                    <th>Expected Revenue</th>
+                                                    <th>Type</th>
+                                                    <th>Stage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-if="leads_opportunity_list">
+                                                    <tr t-foreach="leads_opportunity_list" t-as="item">
+                                                        <td class="ps-4">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="applicant-avatar me-3">
+                                                                    <t t-if="item.get('image')">
+                                                                        <img t-att-src="'data:image/png;base64,' + item['image']"
+                                                                             class="rounded-circle" width="40"
+                                                                             height="40"/>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <span class="avatar-placeholder">
+                                                                            <i class="fa fa-user"></i>
+                                                                        </span>
+                                                                    </t>
+                                                                </div>
+                                                                <div>
+                                                                    <h6 class="mb-0 fw-semibold">
+                                                                        <t t-esc="item.get('partner_name', 'N/A')"/>
+                                                                    </h6>
+                                                                    <small class="text-muted">Contact</small>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="fw-medium">
+                                                                <t t-esc="item.get('name', 'N/A')"/>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="text-muted">
+                                                                <t t-esc="item.get('description', 'No description')[:50]"/>
+                                                                <t t-if="len(item.get('description', '')) > 50">...</t>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="fw-bold text-success">
+                                                                $<t t-esc="'{:,.2f}'.format(float(item.get('expected_revenue', 0)))"/>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span t-if="item.get('type') == 'lead'"
+                                                                  class="badge"
+                                                                  style="background: linear-gradient(135deg, #4776E6, #8E54E9); color: white;">
+                                                                🎯 Lead
+                                                            </span>
+                                                            <span t-if="item.get('type') == 'opportunity'"
+                                                                  class="badge"
+                                                                  style="background: linear-gradient(135deg, #28a745, #20c997); color: white;">
+                                                                💼 Opportunity
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="text-muted fw-medium">
+                                                                <t t-esc="item.get('stage', 'New')"/>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                                <t t-else="">
+                                                    <tr>
+                                                        <td colspan="6" class="text-center py-5">
+                                                            <div class="empty-state">
+                                                                <i class="fa fa-folder-open fa-3x text-muted mb-3"></i>
+                                                                <h5 class="fw-bold text-muted">No Records Found</h5>
+                                                                <p class="text-muted">There are no leads or
+                                                                    opportunities for the selected criteria.</p>
+                                                                <a href="/admin/leads/dashboard"
+                                                                   class="btn btn-primary rounded-pill">
+                                                                    <i class="fa fa-refresh me-2"></i>Reset Filters
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+</odoo>

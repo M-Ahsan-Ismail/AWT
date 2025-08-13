@@ -1,0 +1,403 @@
+<odoo>
+    <template id="report_lesco_bill_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-size: 12px; font-family: Arial;">
+
+                        <!-- New Header Design -->
+                        <div style="border: 1px solid #000; margin-bottom: 20px;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <!-- Left Logo -->
+                                    <td style="width: 15%; text-align: center; padding: 10px; border-right: 1px solid #000; vertical-align: middle;">
+                                        <img src="/bill_management_system/static/description/logo1.jpeg"
+                                             style="max-width: 80px; max-height: 80px;"
+                                             alt="Company Logo"/>
+                                    </td>
+
+                                    <!-- Company Information -->
+                                    <td style="width: 55%; padding: 5px; text-align: left; border-right: 1px solid #000;">
+                                        <div style="line-height: 1.4;">
+                                            <strong style="font-size: 14px;">Askari Development &amp; Holdings (Pvt.)
+                                                Ltd</strong><br/>
+                                            <span style="font-size: 11px;">Z5-76, D-1, Main Boulevard, Gulberg
+                                                III,</span><br/>
+                                            <span style="font-size: 11px;">Lahore.</span><br/>
+                                            <strong style="font-size: 10px;">STRN:3277876113695</strong><br/>
+                                            <strong style="font-size: 10px;">NTN: 7121641-4</strong>
+                                        </div>
+                                    </td>
+
+                                    <!-- Right Logo -->
+                                    <td style="width: 15%; text-align: center; padding: 10px; border-right: 1px solid #000; vertical-align: middle;">
+                                        <img src="/bill_management_system/static/description/logo2.jpeg"
+                                             style="max-width: 80px; max-height: 80px;"
+                                             alt="LESCO Logo"/>
+                                    </td>
+
+                                    <!-- Company Name (Right) -->
+                                    <td style="width: 15%; padding: 10px; text-align: left; vertical-align: middle;">
+                                        <strong style="font-size: 12px; line-height: 1.3;">Lahore Electric Supply
+                                            Company</strong>
+                                    </td>
+                                </tr>
+
+                                <!-- Title Row 1 -->
+                                <tr>
+                                    <td colspan="4"
+                                        style="text-align: center; padding: 10px; border-top: 1px solid #000;">
+                                        <h1 style="margin: 0; font-size: 16px; font-weight: bold;">ELECTRICITY CONSUMER
+                                            BILL (LESCO)</h1>
+                                    </td>
+                                </tr>
+                                <!-- Title Row 2 -->
+                                <tr>
+                                    <td colspan="4"
+                                        style="text-align: center; padding: 10px; border-top: 1px solid #000;">
+                                        <h3 style="margin: 0; font-size: 14px; font-weight: bold;">Sales Tax
+                                            Invoice</h3>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+
+                        <table class="table table-sm table-bordered" style="width: 100%; text-align: center;">
+                            <thead>
+                                <tr>
+                                    <!-- Tall left-side cell for customer details, spanning two rows -->
+                                    <th rowspan="2" colspan="2" style="vertical-align: top; text-align: left;">
+                                        <strong>Name: <t t-esc="o.partner_id.name"/><br/></strong>
+                                        <strong>Address:</strong> <t t-esc="o.partner_id.contact_address"/><br/>
+                                        <strong>CNIC No:</strong> <t t-esc="o.partner_id.cnic"/>
+                                    </th>
+                                    <th style="text-align: center;"><strong>Billing Month</strong></th>
+                                    <th style="text-align: center;"><strong>Reading Date</strong></th>
+                                    <th style="text-align: center;"><strong>Issue Date</strong></th>
+                                    <th style="text-align: center;"><strong>Due Date</strong></th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;"><strong><t t-esc="o.billing_month"/></strong></td>
+                                    <td style="text-align: center;"><t t-esc="o.reading_date"/></td>
+                                    <td style="text-align: center;"><t t-esc="o.issue_date"/></td>
+                                    <td style="text-align: center;"><strong><t
+                                            t-esc="o.invoice_date_due"/></strong></td>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th style="width: 150px; text-align: center;">Meter ID</th>
+                                    <th style="width: 150px; text-align: center;">Unit Price</th>
+                                    <th style="text-align: center;">Previous Meter Reading</th>
+                                    <th style="text-align: center;">Present Meter Reading</th>
+                                    <th style="text-align: center;">Consumed Units</th>
+                                    <th style="text-align: center;"><strong>MF</strong></th>
+                                </tr>
+                                <tr>
+                                    <!-- Second data row: Meter details -->
+                                    <td style="text-align: center;"><strong><t t-esc="o.meter_id"/></strong></td>
+                                    <td style="text-align: center;">
+                                        <t t-if="o.invoice_line_ids" t-esc="o.invoice_line_ids[0].price_unit"
+                                           t-options='{"widget": "float", "precision": 2}'/>
+                                        <t t-else="" t-esc="0.0"/>
+                                    </td>                                    <td style="text-align: center;"><t
+                                        t-esc="o.previous_reading_unit"/></td>
+                                    <td style="text-align: center;"><t t-if="o.invoice_line_ids"
+                                                                       t-esc="o.invoice_line_ids[0].next_reading_unit"
+                                                                       t-options='{"widget": "float", "precision": 2}'/></td>
+                                    <td style="text-align: center;"><t t-if="o.invoice_line_ids"
+                                                                       t-esc="o.invoice_line_ids[0].quantity"
+                                                                       t-options='{"widget": "float", "precision": 2}'/></td>
+                                    <td style="text-align: center;"><t t-esc="o.mf_value"
+                                                                       t-options='{"widget": "float", "precision": 2}'/></td>
+                                </tr>
+
+                                <tr>
+                                    <th style="width: 150px; text-align: center;">Reference No</th>
+                                    <th style="width: 150px; text-align: center;">Tarrif</th>
+                                    <th style="text-align: center;">Load</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <!-- Second data row: Meter details -->
+                                    <td style="text-align: center;"><strong><t t-esc="o.reference_no"/></strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: left;" colspan="2">Billed Units</td>
+                                    <td style="text-align: right;"><t t-if="o.invoice_line_ids"
+                                                                      t-esc="o.invoice_line_ids[0].quantity"
+                                                                      t-options='{"widget": "float", "precision": 2}'/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        <table class="table table-bordered" style="width: 100%; margin-top: 10px;">
+                            <tr>
+                                <td colspan="6" style="padding: 0; vertical-align: top;">
+                                    <!-- Upper Left: Complaint Numbers and fields -->
+                                    <div style="padding: 10px; height: 80px; border-bottom: 1px solid #ccc;">
+                                        <strong>Complaint Numbers</strong><br/>
+                                        <strong>Mobile No:</strong><span t-field="o.complaint_mobile_number"/><br/>
+                                        <strong>PTCL No:</strong><span t-field="o.complaint_ptcl_number"/><br/>
+                                    </div>
+
+                                    <!-- Spacing between sections -->
+                                    <div style="height: 40px;"></div>
+
+                                    <!-- Lower Left: Meter Picture section - stretched to fill -->
+                                    <div style="padding: 10px; text-align: center; height: 200px; position: relative;">
+                                        <div style="margin-bottom: 10px;">
+                                            <strong>Meter Picture</strong>
+                                        </div>
+
+                                        <!-- Image stretched to cover the lower section -->
+                                        <t t-if="o.electric_bill_image">
+                                            <img t-att-src="image_data_uri(o.electric_bill_image)"
+                                                 style="width: 100%; height: calc(100% - 30px); border: 2px solid #333; object-fit: cover;"/>
+                                        </t>
+                                        <t t-else="">
+                                            <div style="border: 2px solid #333; width: 100%; height: calc(100% - 30px); display: flex; align-items: center; justify-content: center; background-color: #f0f0f0; font-size: 12px; color: #666;">
+                                                [Meter Image Not Available]
+                                            </div>
+                                        </t>
+                                    </div>
+                                </td>
+
+                                <!-- Right Side: Billing Info -->
+                                <td colspan="6" style="padding: 0;">
+                                    <table style="width: 100%;">
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>Energy Charges</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">
+                                                <t t-if="o.invoice_line_ids"
+                                                   t-esc="o.invoice_line_ids[0].quantity * o.invoice_line_ids[0].price_unit"
+                                                   t-options='{"widget": "float", "precision": 2}'/>
+                                                <t t-else="" t-esc="0.0"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;">Fuel Price Adjustment</td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">
+                                                <t t-if="len(o.invoice_line_ids) > 1"
+                                                   t-esc="o.invoice_line_ids[1].price_unit"
+                                                   t-options='{"widget": "float", "precision": 2}'/>
+                                                <t t-else="" t-esc="0.0"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px; text-align: left;">
+                                                <strong>Sales Tax:</strong>
+                                                <t t-if="o.invoice_line_ids">
+                                                    <t t-foreach="o.invoice_line_ids[0].tax_ids" t-as="tax">
+                                                        <t t-esc="tax.name"/> (<t t-esc="tax.amount"/>%)
+                                                    </t>
+                                                </t>
+                                                <t t-else="">
+                                                    No Tax
+                                                </t>
+                                            </td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">
+                                                <t t-if="o.invoice_line_ids"
+                                                   t-esc="o.invoice_line_ids[0].price_total - o.invoice_line_ids[0].price_subtotal"
+                                                   t-options='{"widget": "float", "precision": 2}'/>
+                                                <t t-else="" t-esc="0.0"/>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;">Add: Further Tax</td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">
+                                                <t t-if="len(o.invoice_line_ids) > 2"
+                                                   t-esc="o.invoice_line_ids[2].price_unit"
+                                                   t-options='{"widget": "float", "precision": 2}'/>
+                                                <t t-else="" t-esc="0.0"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;">Add: Extra Tax</td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">
+                                                <t t-if="len(o.invoice_line_ids) > 3"
+                                                   t-esc="o.invoice_line_ids[3].price_unit"
+                                                   t-options='{"widget": "float", "precision": 2}'/>
+                                                <t t-else="" t-esc="0.0"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>Value Incl. Of Sales
+                                                Tax</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">
+                                                <strong>
+                                                    <!-- Store lines to avoid repetition -->
+                                                    <t t-set="lines" t-value="o.invoice_line_ids"/>
+
+                                                    <!-- Sum of first 4 price_subtotal (safe) -->
+                                                    <t t-set="subtotal" t-value="
+            (lines[0].price_subtotal if len(lines) > 0 else 0.0) +
+            (lines[1].price_subtotal if len(lines) > 1 else 0.0) +
+            (lines[2].price_subtotal if len(lines) > 2 else 0.0) +
+            (lines[3].price_subtotal if len(lines) > 3 else 0.0)
+        "/>
+
+                                                    <!-- Tax from first line (safe) -->
+                                                    <t t-set="tax" t-value="
+            (lines[0].price_total - lines[0].price_subtotal) if len(lines) > 0 else 0.0
+        "/>
+
+                                                    <!-- Final amount -->
+                                                    <t t-esc="subtotal + tax"
+                                                       t-options='{"widget": "float", "precision": 2}'/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>Income Tax</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">
+                                                <t t-if="len(o.invoice_line_ids) > 4"
+                                                   t-esc="o.invoice_line_ids[4].price_unit"
+                                                   t-options='{"widget": "float", "precision": 2}'/>
+                                                <t t-else="" t-esc="0.0"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;">Bill Adjustment/instalments</td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><h5>Billing
+                                                Details</h5></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;"><h5>
+                                                Amount</h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>Current Bill</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;"><strong>
+                                                <t t-esc="o.amount_total"/></strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>Arrears/Age</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>P.M Relief to
+                                                Industry</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>Payable Within Due
+                                                Date</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;"><strong>
+                                                <t t-esc="o.amount_total"
+                                                   t-options='{"widget": "float", "precision": 2}'/></strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>Late Payment
+                                                Surcharge</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;"><strong>
+                                                <t t-esc="o.late_payment_surcharge"
+                                                   t-options='{"widget": "float", "precision": 2}'/></strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-3" style="padding: 5px;"><strong>Payable After Due
+                                                Date</strong></td>
+                                            <td class="col-3" style="text-align: right; padding: 5px;"><strong>
+                                                <t t-esc="o.late_payment_surcharge + o.amount_total"
+                                                   t-options='{"widget": "float", "precision": 2}'/></strong></td>
+                                        </tr>
+
+                                        <!-- FPA Details - 2 Column Layout -->
+                                        <tr>
+                                            <td style="padding: 3px; font-size: 10px;">FPA VAR 0</td>
+                                            <td style="text-align: left; padding: 3px; font-size: 10px;">FPA F.TAX
+                                                0</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 3px; font-size: 10px;">FPA FD 0</td>
+                                            <td style="text-align: left; padding: 3px; font-size: 10px;">FPA F.TAX
+                                                0</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 3px; font-size: 10px;">FPA GST 0</td>
+                                            <td style="text-align: left; padding: 3px; font-size: 10px;">FPA R.TAX
+                                                0</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 3px; font-size: 10px;">FPA I.TAX 0</td>
+                                            <td style="text-align: left; padding: 3px; font-size: 10px;"></td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <br/>
+                        <!-- Notes -->
+                        <div style="font-size: 10px;">
+                            <strong>Note:</strong>
+                            <p style="margin: 5px 0;">1. Payment to be made through cross cheque in favor of <strong>
+                                "Askari Development &amp; Holdings (Pvt.) Ltd"</strong></p>
+                            <p style="margin: 5px 0;">2. In case of non-payment, allied services will be disconnected
+                                without any notice.</p>
+                            <p style="margin: 5px 0;">3. Fuel price adjustment as per NEPRA S.R.O. 05 (1)/2025, Dated
+                                January 07, 2025.</p>
+                            <p style="margin: 5px 0;">4. In case of any query regarding the bill, please contact account
+                                department within <strong>two days of issuance</strong></p>
+                        </div>
+
+                        <br/><br/>
+
+                        <div class="row" style="margin-top: 25px; text-align: center;">
+                            <div class="col-4">
+                                <span>Meter Inspector: _______________</span>
+                            </div>
+                            <div class="col-4">
+                                <span>Snr. AM(E&amp;M): _______________</span>
+
+                            </div>
+                            <div class="col-4">
+                                <span>Snr. AM(Fin/Tax): _______________</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="paper_format_electricity_bill" model="report.paperformat">
+        <field name="name">Electricity Bill Format</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="margin_top">8</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_spacing">40</field>
+        <field name="dpi">90</field>
+    </record>
+
+
+    <record id="electricity_invoice_report_action" model="ir.actions.report">
+        <field name="name">Electricity Invoice Bill</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bill_management_system.report_lesco_bill_template</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="bill_management_system.paper_format_electricity_bill"/>
+    </record>
+
+
+</odoo>

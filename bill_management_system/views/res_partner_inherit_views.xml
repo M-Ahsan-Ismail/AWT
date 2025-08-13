@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_form_inherit_meter_fields" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.meter.fields</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="meter_id"/>
+                    <field name="reference_no"/>
+                    <field name="cnic"/>
+                    <field name="partner_previous_reading"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="portal_create_bill" name="Portal My Home: Create Bill"
+                  inherit_id="portal.portal_my_home">
+            <xpath expr="//div[contains(@class, 'o_portal_docs')]" position="inside">
+                <div class="o_portal_docs">
+                    <div class="box o_portal_doc_entry border-0 shadow-sm"
+                         style="
+                    cursor: pointer;
+                    width: 100%;
+                    max-width: 420px;
+                    min-height: 110px;
+                   background: linear-gradient(135deg, #714B67, #9a6b88);
+                    color: white;
+                    border-radius: 14px;
+                    padding: clamp(12px, 2vw, 16px);
+                    transition: all 0.3s ease-in-out;
+                    position: relative;
+                    overflow: hidden;
+                    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+                 "
+                         onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 18px rgba(0,0,0,0.3)';"
+                         onmouseout="this.style.transform=''; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.25)';">
+                        <a t-att-href="'/create/electric/bill'"
+                           style="display: block; text-decoration: none; color: white;">
+                            <div class="o_portal_doc">
+                                <h4 style="
+                            font-family: 'Poppins', sans-serif;
+                            font-weight: 700;
+                            font-size: 1.5rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                        ">
+                                    Create New Bill
+                                    <img src="/bill_management_system/static/description/icon.png"
+                                         alt="Create Bill Icon"
+                                         style="width: 11vw; max-width: 42px; height: auto; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));"/>
+                                </h4>
+                                <p style="
+                            font-family: 'Poppins', sans-serif;
+                            font-size: 1rem;
+                            color: rgba(255, 255, 255, 0.95);
+                            margin-top: 6px;
+                        ">
+                                    <span style="font-weight: 500;">Generate and save an electricity bill</span><br/>
+                                    <span style="font-weight: 700; font-size: 1.1rem;">Click here to begin →</span>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+
+        <template id="electric_bill_creation_template_id" name="Electric Bill Creation">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <div class="container mt-4">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                <!-- Header Section -->
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <h3 class="mb-0">
+                                                    <i class="fa fa-bolt me-2"></i>
+                                                    Create Electric Bill
+                                                </h3>
+                                                <small class="opacity-75">Generate and manage electric utility
+                                                    bills</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Main Form -->
+                                <form action="/create/electric/bill" method="post" enctype="multipart/form-data"
+                                      class="needs-validation" novalidate="true">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                    <div class="row">
+                                        <!-- Left Column -->
+                                        <div class="col-lg-8">
+                                            <!-- Customer Information -->
+                                            <div class="card shadow-sm mb-4">
+                                                <div class="card-header bg-light">
+                                                    <h5 class="mb-0">
+                                                        <i class="fa fa-user me-2 text-primary"></i>
+                                                        Customer Information
+                                                    </h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="partner_id" class="form-label required">
+                                                                Customer</label>
+                                                            <select class="form-select" id="partner_id"
+                                                                    name="partner_id" required="true">
+                                                                <option value="">Select Customer...</option>
+                                                                <t t-foreach="res_partner_list" t-as="partner">
+                                                                    <option t-att-value="partner['id']"
+                                                                            t-att-data-meter="partner['meter_id']"
+                                                                            t-att-data-reference="partner['reference_no']"
+                                                                            t-att-data-previous-reading="partner['previous_reading_unit']"
+                                                                            t-esc="partner['name']"/>
+                                                                </t>
+                                                            </select>
+
+                                                            <div class="invalid-feedback">
+                                                                Please select a customer.
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="meter_id" class="form-label required">Meter
+                                                                ID</label>
+                                                            <input type="text" class="form-control" id="meter_id"
+                                                                   name="meter_id"
+                                                                   placeholder="Enter meter identification"
+                                                                   required="true"/>
+                                                            <div class="invalid-feedback">
+                                                                Please enter a valid meter ID.
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="reference_no" class="form-label">Reference
+                                                                    Number</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="reference_no" name="reference_no"
+                                                                       placeholder="Optional reference number"/>
+                                                            </div>
+
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="previous_reading_unit" class="form-label">
+                                                                    Previous Reading Unit</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="previous_reading_unit"
+                                                                       name="previous_reading_unit"
+                                                                       placeholder="Auto-filled from customer"
+                                                                       readonly="1"/>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Billing Details -->
+                                            <div class="card shadow-sm mb-4">
+                                                <div class="card-header bg-light">
+                                                    <h5 class="mb-0">
+                                                        <i class="fa fa-file-invoice me-2 text-success"></i>
+                                                        Billing Details
+                                                    </h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="next_reading_value" class="form-label required">
+                                                                Current Reading (Units)</label>
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control"
+                                                                       id="next_reading_value"
+                                                                       name="next_reading_value" step="0.01" min="0"
+                                                                       placeholder="0.00" required="true"/>
+                                                                <span class="input-group-text">kWh</span>
+                                                            </div>
+                                                            <div class="invalid-feedback">
+                                                                Please enter a valid reading value.
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="billing_month" class="form-label required">
+                                                                Billing Month</label>
+                                                            <input type="date" class="form-control" id="billing_month"
+                                                                   name="billing_month" required="true"/>
+                                                            <div class="invalid-feedback">
+                                                                Please select billing month.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4 mb-3">
+                                                            <label for="reading_date" class="form-label">Reading
+                                                                Date</label>
+                                                            <input type="date" class="form-control" id="reading_date"
+                                                                   name="reading_date"/>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <label for="issue_date" class="form-label">Issue
+                                                                Date</label>
+                                                            <input type="date" class="form-control" id="issue_date"
+                                                                   name="issue_date"/>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <label for="due_date" class="form-label">Due Date</label>
+                                                            <input type="date" class="form-control" id="due_date"
+                                                                   name="due_date"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Right Column -->
+                                        <div class="col-lg-4">
+                                            <!-- Bill Image Upload -->
+                                            <div class="card shadow-sm mb-4">
+                                                <div class="card-header bg-light">
+                                                    <h5 class="mb-0">
+                                                        <i class="fa fa-image me-2 text-info"></i>
+                                                        Bill Image
+                                                    </h5>
+                                                </div>
+                                                <div class="card-body text-center">
+                                                    <div class="upload-area border border-2 border-dashed rounded p-4 mb-3"
+                                                         style="min-height: 200px; cursor: pointer;"
+                                                         onclick="document.getElementById('image_1920').click();">
+                                                        <div class="upload-content">
+                                                            <i class="fa fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                                            <p class="text-muted mb-2">Click to upload bill image</p>
+                                                            <small class="text-muted">PNG, JPG, PDF up to 10MB</small>
+                                                        </div>
+                                                        <img id="image-preview"
+                                                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                                             class="img-fluid rounded d-none" style="max-height: 180px;"
+                                                             alt="Preview"/>
+                                                    </div>
+                                                    <input type="file" id="image_1920" name="image_1920"
+                                                           class="d-none" accept="image/*,.pdf"
+                                                           onchange="previewImage(this)"/>
+                                                    <small class="text-muted">Optional: Upload scanned copy of the
+                                                        bill</small>
+                                                </div>
+                                            </div>
+
+                                            <!-- Quick Info -->
+                                            <div class="card shadow-sm mb-4">
+                                                <div class="card-header bg-light">
+                                                    <h6 class="mb-0">
+                                                        <i class="fa fa-info-circle me-2 text-warning"></i>
+                                                        Quick Info
+                                                    </h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <small class="text-muted">Bill Type:</small>
+                                                        <small class="text-end">Electric Utility</small>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <small class="text-muted">Status:</small>
+                                                        <span class="badge bg-success">Active</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="card shadow-sm">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="confirm_details" required="true"/>
+                                                        <label class="form-check-label" for="confirm_details">
+                                                            I confirm that all entered details are correct
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 text-end">
+                                                    <button type="button" class="btn btn-outline-secondary me-2"
+                                                            onclick="history.back()">
+                                                        <i class="fa fa-arrow-left me-1"></i>Cancel
+                                                    </button>
+                                                    <button type="submit" class="btn"
+                                                            style="background-color: #714B67; border-color: #714B67; color: white;">
+                                                        <i class="fa fa-save me-1"></i>Create Bill
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Modal - Fixed Version -->
+                <t t-if="success_data">
+                    <div class="modal fade show" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
+                         aria-hidden="true" style="display: block;">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow-lg">
+                                <!-- Modal Header with Close Button - FIXED -->
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close"
+                                            aria-label="Close"
+                                            onclick="closeSuccessModal()"></button>
+                                </div>
+                                <div class="modal-body p-0">
+                                    <div class="text-center py-5 px-4">
+                                        <!-- Success Animation -->
+                                        <div class="checkmark-circle">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+
+                                        <h2 class="text-success mb-3 fw-bold">Electric Bill Created Successfully!</h2>
+
+                                        <div class="mb-4">
+                                            <p class="text-muted mb-2">
+                                                Bill has been created for
+                                            </p>
+                                            <p class="text-muted mb-2">
+                                                Customer <strong class="text-primary"><t
+                                                    t-esc="success_data['partner_name']"/></strong>
+                                            </p>
+                                            <p class="text-muted mb-0">
+                                                Meter ID: <strong class="text-info"><t
+                                                    t-esc="success_data['meter_id']"/></strong>
+                                            </p>
+                                        </div>
+
+                                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                            <button type="button" class="btn bg-primary text-white btn-lg px-4"
+                                                    onclick="createAnotherBill()">
+                                                <i class="fa fa-plus me-2"></i>Create Another Bill
+                                            </button>
+                                            <button type="button" class="btn btn-outline-success btn-lg px-4"
+                                                    onclick="window.location.href='/bills/history'">
+                                                <i class="fa fa-list me-2"></i>View All Bills
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add modal backdrop -->
+                    <div class="modal-backdrop fade show" id="modalBackdrop"></div>
+                </t>
+
+                <!-- Custom Styles -->
+                <style>
+                    .required::after {
+                        content: " *";
+                        color: #dc3545;
+                    }
+
+                    .upload-area:hover {
+                        background-color: #f8f9fa;
+                        border-color: #007bff !important;
+                    }
+
+                    .upload-area.dragover {
+                        background-color: #e3f2fd;
+                        border-color: #2196f3 !important;
+                    }
+
+                    .card {
+                        border: 1px solid #dee2e6;
+                        transition: all 0.2s ease-in-out;
+                    }
+
+                    .card:hover {
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+                    }
+
+                    .form-control:focus, .form-select:focus {
+                        border-color: #007bff;
+                        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+                    }
+
+                    .btn-primary {
+                        background-color: #007bff;
+                        border-color: #007bff;
+                    }
+
+                    .btn-primary:hover {
+                        background-color: #0056b3;
+                        border-color: #0056b3;
+                    }
+
+                    .checkmark-circle {
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        background: #28a745;
+                        margin: 0 auto 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        animation: scaleIn 0.5s ease-in-out;
+                    }
+
+                    .checkmark-circle i {
+                        color: white;
+                        font-size: 40px;
+                        animation: checkmark 0.6s ease-in-out 0.2s both;
+                        transform: scale(0);
+                    }
+
+                    @keyframes scaleIn {
+                        0% {
+                            transform: scale(0);
+                        }
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+
+                    @keyframes checkmark {
+                        0% {
+                            transform: scale(0);
+                        }
+                        50% {
+                            transform: scale(1.2);
+                        }
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+
+                </style>
+
+                <!-- JavaScript -->
+                <script type="text/javascript">
+                    // Image preview functionality
+                    function previewImage(input) {
+                    const preview = document.getElementById('image-preview');
+                    const uploadContent = document.querySelector('.upload-content');
+
+                    if (input.files &amp;&amp; input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                    uploadContent.classList.add('d-none');
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    }
+                    }
+
+                    // Form validation
+                    (function() {
+                    'use strict';
+                    window.addEventListener('load', function() {
+                    var forms = document.getElementsByClassName('needs-validation');
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                    }, false);
+                    });
+                    }, false);
+                    })();
+
+
+                    // Drag and drop functionality for image upload
+                    const uploadArea = document.querySelector('.upload-area');
+                    const fileInput = document.getElementById('image_1920');
+
+                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, preventDefaults, false);
+                    });
+
+                    function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    }
+
+                    ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, highlight, false);
+                    });
+
+                    ['dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, unhighlight, false);
+                    });
+
+                    function highlight(e) {
+                    uploadArea.classList.add('dragover');
+                    }
+
+                    function unhighlight(e) {
+                    uploadArea.classList.remove('dragover');
+                    }
+
+                    uploadArea.addEventListener('drop', handleDrop, false);
+
+                    function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    if (files.length > 0) {
+                    fileInput.files = files;
+                    previewImage(fileInput);
+                    }
+                    }
+
+                    // Function to close modal without redirecting
+                    function closeSuccessModal() {
+                    const modal = document.getElementById('successModal');
+                    const backdrop = document.getElementById('modalBackdrop');
+
+                    if (modal) {
+                    modal.style.display = 'none';
+                    modal.classList.remove('show');
+                    }
+
+                    if (backdrop) {
+                    backdrop.remove();
+                    }
+
+                    // Remove success parameters from URL without reloading
+                    const url = new URL(window.location);
+                    url.searchParams.delete('success');
+                    url.searchParams.delete('invoice_name');
+                    url.searchParams.delete('partner_name');
+                    url.searchParams.delete('meter_id');
+                    window.history.replaceState({}, document.title, url.pathname);
+                    }
+
+                    // Function to create another bill (reloads the page cleanly)
+                    function createAnotherBill() {
+                    window.location.href = '/create/electric/bill';
+                    }
+
+                    // Optional: Close modal when clicking on backdrop
+                    document.addEventListener('DOMContentLoaded', function() {
+                    const backdrop = document.getElementById('modalBackdrop');
+                    if (backdrop) {
+                    backdrop.addEventListener('click', function() {
+                    closeSuccessModal();
+                    });
+                    }
+                    });
+
+                    // When customer changes → set meter_id, reference_no, and previous_reading_unit
+                    document.getElementById('partner_id').addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    if (selectedOption.value) {
+                    document.getElementById('meter_id').value = selectedOption.getAttribute('data-meter') || '';
+                    document.getElementById('reference_no').value = selectedOption.getAttribute('data-reference') || '';
+                    document.getElementById('previous_reading_unit').value =
+                    selectedOption.getAttribute('data-previous-reading') || '';
+                    }
+                    });
+
+                    // When meter_id changes → auto-select customer &amp; set reference and previous reading
+                    document.getElementById('meter_id').addEventListener('input', function () {
+                    const meterValue = this.value.trim();
+                    let found = false;
+
+                    const select = document.getElementById('partner_id');
+                    for (let i = 0; i &lt; select.options.length; i++) {
+                    if (select.options[i].getAttribute('data-meter') === meterValue) {
+                    select.selectedIndex = i;
+                    document.getElementById('reference_no').value = select.options[i].getAttribute('data-reference') ||
+                    '';
+                    document.getElementById('previous_reading_unit').value =
+                    select.options[i].getAttribute('data-previous-reading') || '';
+                    found = true;
+                    break;
+                    }
+                    }
+                    if (!found) {
+                    select.selectedIndex = 0; // reset if not found
+                    document.getElementById('reference_no').value = '';
+                    document.getElementById('previous_reading_unit').value = '';
+                    }
+                    });
+
+
+                </script>
+            </t>
+        </template>
+    </data>
+</odoo>

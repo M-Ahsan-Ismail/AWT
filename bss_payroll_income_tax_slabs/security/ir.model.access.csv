@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tax_slab,tax.slab,model_tax_slab,,1,1,1,1
+access_tax_slab_line,tax.slab.line,model_tax_slab_line,,1,1,1,1
+access_income_tax_wizard,income.tax.wizard,model_income_tax_wizard,,1,1,1,1

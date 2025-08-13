@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="income_tax_wizard_view_form" model="ir.ui.view">
+            <field name="name">income.tax.wizard.view.form</field>
+            <field name="model">income.tax.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="slab_id"/>
+                        </group>
+                    </group>
+
+                    <footer>
+                        <button string="Confirm" name="action_confirm" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_income_tax_wizard" model="ir.actions.act_window">
+            <field name="name">Compute Income Tax</field>
+            <field name="res_model">income.tax.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="income_tax_wizard_view_form"/>
+        </record>
+    </data>
+</odoo>

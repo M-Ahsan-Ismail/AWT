@@ -1,0 +1,23 @@
+<odoo>
+    <record id="compute_income_tax_server_action_id" model="ir.actions.server">
+        <field name="name">Compute Income Tax</field>
+        <field name="model_id" ref="hr_payroll.model_hr_contract"/>
+        <field name="binding_model_id" ref="hr_payroll.model_hr_contract"/>
+        <field name="binding_type">action</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = {
+                'type': 'ir.actions.act_window',
+                'name': 'Compute Income Tax',
+                'res_model': 'income.tax.wizard',
+                'view_mode': 'form',
+                'target': 'new',
+                'context': {
+                    'default_slab_id': False,
+                    'active_ids': env.context.get('active_ids', []),
+                    'active_model': 'hr.contract',
+                }
+            }
+        </field>
+    </record>
+</odoo>

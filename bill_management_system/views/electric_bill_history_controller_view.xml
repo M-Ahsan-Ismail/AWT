@@ -1,0 +1,448 @@
+<odoo>
+    <template id="portal_bill_history" name="Portal My Home: Bill History"
+              inherit_id="portal.portal_my_home">
+        <xpath expr="//div[contains(@class, 'o_portal_docs')]" position="inside">
+            <div class="o_portal_docs">
+                <div class="box o_portal_doc_entry border-0 shadow-sm"
+                     style="
+                    cursor: pointer;
+                    width: 100%;
+                    max-width: 420px;
+                    min-height: 100px;
+                    background: linear-gradient(135deg, #8F8F8F, #8F8F8F);
+                    color: white;
+                    border-radius: 12px;
+                    padding: clamp(10px, 2vw, 14px);
+                    transition: all 0.3s ease-in-out;
+                    position: relative;
+                    overflow: hidden;
+                    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+                 "
+                     onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 18px rgba(0,0,0,0.3)';"
+                     onmouseout="this.style.transform=''; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.25)';">
+                    <a t-att-href="'/bill/history'" style="display: block; text-decoration: none; color: white;">
+                        <div class="o_portal_doc">
+                            <h4 style="
+                            font-family: 'Poppins', sans-serif;
+                            font-weight: 700;
+                            font-size: 1.5rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                        ">
+                                Bill History
+                                <img src="/bill_management_system/static/description/icon.png"
+                                     alt="Bill Icon"
+                                     style="width: 10vw; max-width: 40px; height: auto; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));"/>
+                            </h4>
+                            <p style="
+                            font-family: 'Poppins', sans-serif;
+                            font-size: 1rem;
+                            color: rgba(255, 255, 255, 0.95);
+                            margin-top: 6px;
+                        ">
+                                <span style="font-weight: 500;">View and filter your past bills</span><br/>
+                                <span style="font-weight: 700; font-size: 1.1rem;">Click to get started →</span>
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+
+    <template id="bill_history_template_id" name="Bill History Template">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="mb-8 text-center py-4" style="background-color: #875A7B;">
+                    <h1 class="text-3xl font-bold text-white">Bill History</h1>
+                    <p class="text-white mt-2 text-lg">View and manage your billing history</p>
+                </div>
+
+
+                <div class="container py-5">
+                    <!-- Phase 1: Meter ID Input Form -->
+                    <t t-if="phase == 'ask_meter'">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 col-md-8">
+                                <div class="search-card">
+                                    <div class="card-header">
+                                        <h3 class="mb-0">
+                                            <i class="fa fa-search me-2"></i>
+                                            Find Your Bills
+                                        </h3>
+                                        <p class="text-muted mb-0">Enter your meter ID to view billing history</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="POST" action="/bill/history">
+                                            <div class="form-floating mb-4">
+                                                <input type="text" class="form-control form-control-lg"
+                                                       id="meter_id" name="meter_id" placeholder="Enter Meter ID"
+                                                       required="true"/>
+                                                <label for="meter_id">
+                                                    <i class="fa fa-tachometer-alt me-2"></i>Meter ID
+                                                </label>
+                                            </div>
+
+                                            <t t-if="error_message">
+                                                <div class="alert alert-danger d-flex align-items-center mb-4">
+                                                    <i class="fa fa-exclamation-triangle me-2"></i>
+                                                    <span t-esc="error_message"/>
+                                                </div>
+                                            </t>
+
+                                            <button type="submit" class="btn btn-primary btn-lg w-100 search-btn">
+                                                <i class="fa fa-search me-2"></i>
+                                                <span>Search Bills</span>
+                                                <i class="fa fa-arrow-right ms-2"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">
+                                            <i class="fa fa-info-circle me-1"></i>
+                                            Your meter ID can be found on your previous bills or meter device
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Phase 2: Filter Form and Bill Results -->
+                    <t t-if="phase == 'show_filter_and_results'">
+                        <!-- Filter Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="filter-card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h4 class="mb-0">
+                                                <i class="fa fa-filter me-2"></i>
+                                                Filter Bills
+                                            </h4>
+                                            <small class="text-muted">Meter ID: <strong t-esc="meter_id"/></small>
+                                        </div>
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                onclick="window.location.href='/bill/history'">
+                                            <i class="fa fa-times me-1"></i>New Search
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="POST" action="/bill/history" class="row g-3 align-items-end">
+                                            <input type="hidden" name="meter_id" t-att-value="meter_id"/>
+
+                                            <div class="col-md-4">
+                                                <div class="form-floating">
+                                                    <input type="date" class="form-control" id="from_date"
+                                                           name="from_date" t-att-value="from_date"/>
+                                                    <label for="from_date">
+                                                        <i class="fa fa-calendar me-2"></i>From Date
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-floating">
+                                                    <input type="date" class="form-control" id="to_date"
+                                                           name="to_date" t-att-value="to_date"/>
+                                                    <label for="to_date">
+                                                        <i class="fa fa-calendar me-2"></i>To Date
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="d-flex justify-content-between gap-2">
+                                                    <button type="submit" class="btn btn-primary btn-md w-50">
+                                                        <i class="fa fa-filter me-1"></i>Apply Filter
+                                                    </button>
+                                                    <button type="button" id="clear-dates-btn"
+                                                            class="btn btn-outline-secondary btn-md w-50"
+                                                            onclick="clearDateFilters(this);">
+                                                        <i class="fa fa-refresh me-1"></i>Reset
+                                                    </button>
+
+                                                    <script>
+                                                        (function(){
+                                                        window.clearDateFilters = function(button){
+                                                        try {
+                                                        var form = button.closest('form');
+                                                        if (!form) return;
+
+                                                        ['from_date', 'to_date'].forEach(function(name){
+                                                        var el = form.querySelector('[name="'+name+'"]');
+                                                        if (el) {
+                                                        el.value = '';
+                                                        el.dispatchEvent(new Event('input', {bubbles:true}));
+                                                        el.dispatchEvent(new Event('change', {bubbles:true}));
+                                                        }
+                                                        });
+
+                                                        // Submit the form after clearing
+                                                        form.submit();
+
+                                                        } catch (err) {
+                                                        console.error('clearDateFilters error', err);
+                                                        }
+                                                        };
+                                                        })();
+                                                    </script>
+
+
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Section -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="results-card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h4 class="mb-0">
+                                                <i class="fa fa-file-invoice me-2"></i>
+                                                Billing History
+                                            </h4>
+                                            <t t-if="bill_history_list">
+                                                <small class="text-muted">Found <strong t-esc="len(bill_history_list)"/>
+                                                    bills</small>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body p-0">
+                                        <t t-if="not bill_history_list">
+                                            <div class="empty-state">
+                                                <div class="empty-icon">
+                                                    <i class="fa fa-inbox fa-4x"></i>
+                                                </div>
+                                                <h5>No Bills Found</h5>
+                                                <p class="text-muted">No billing records were found for this meter ID
+                                                    and date range.</p>
+                                                <button class="btn btn-primary"
+                                                        onclick="window.location.href='/bill/history'">
+                                                    <i class="fa fa-search me-2"></i>Try Different Search
+                                                </button>
+                                            </div>
+                                        </t>
+
+                                        <t t-else="">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover modern-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sortable">
+                                                                <i class="fa fa-hashtag me-2"></i>Bill Number
+                                                            </th>
+                                                            <th class="sortable">
+                                                                <i class="fa fa-user me-2"></i>Customer
+                                                            </th>
+                                                            <th class="sortable">
+                                                                <i class="fa fa-calendar me-2"></i>Invoice Date
+                                                            </th>
+                                                            <th class="sortable">
+                                                                <i class="fa fa-calendar-alt me-2"></i>Billing Month
+                                                            </th>
+                                                            <th class="text-end sortable">
+                                                                <i class="fa fa-dollar-sign me-2"></i>Amount
+                                                            </th>
+                                                            <th class="text-center">
+                                                                <i class="fa fa-info-circle me-2"></i>Status
+                                                            </th>
+                                                            <th class="text-center">
+                                                                <i class="fa fa-cogs me-2"></i>Actions
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <t t-foreach="bill_history_list" t-as="bill">
+                                                            <tr class="bill-row">
+                                                                <td class="fw-semibold">
+                                                                    <t t-esc="bill['name']"/>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="avatar-sm me-2"
+                                                                             style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
+                                                                            <t t-if="bill['partner_image']">
+                                                                                <img t-att-src="'data:image/jpeg;base64,%s' % bill['partner_image']"
+                                                                                     alt="Customer"
+                                                                                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"/>
+                                                                            </t>
+                                                                            <t t-else="">
+                                                                                <i class="fa fa-user-circle fa-lg text-primary"
+                                                                                   style="font-size: 40px;"></i>
+                                                                            </t>
+                                                                        </div>
+                                                                        <t t-esc="bill['customer_name']"/>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-light text-dark">
+                                                                        <t t-esc="bill['invoice_date']"/>
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-info">
+                                                                        <t t-esc="bill['billing_month']"/>
+                                                                    </span>
+                                                                </td>
+                                                                <td class="text-end fw-bold amount-cell">
+                                                                    $<t t-esc="'{:,.2f}'.format(bill['total_bill_amount'])"/>
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <t t-set="status_class"
+                                                                       t-value="'success' if bill['paid'] else 'danger'"/>
+                                                                    <span t-att-class="'badge bg-%s status-badge' % status_class">
+                                                                        <i t-att-class="'fa fa-circle me-1 %s-dot' % status_class"></i>
+                                                                        <t t-esc="'Paid' if bill['paid'] else 'Not Paid'"/>
+                                                                    </span>
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <div class="action-buttons">
+                                                                        <a t-att-href="'/bill/details/%s' % bill['id']"
+                                                                           class="btn btn-outline-primary btn-sm action-btn"
+                                                                           title="View Details">
+                                                                            View
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="bill_details_template" name="Bill Details Template">
+        <t t-call="website.layout">
+            <div class="oe_structure"/>
+            <section class="bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen py-8">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Header -->
+                    <div class="mb-8 text-center">
+                        <h1 class="text-3xl font-bold text-primary">Bill Details</h1>
+                        <p class="text-gray-600 mt-2 text-lg">Detailed information for your selected bill</p>
+                    </div>
+
+                    <!-- Bill Details Card -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
+                        <t t-if="bill">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Bill Information -->
+                                <div class="space-y-4">
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-primary">Bill Information</h2>
+                                        <div class="mt-3 space-y-3">
+                                            <p class="flex items-center">
+                                                <i class="fas fa-file-invoice mr-2 text-primary"></i>
+                                                <span class="font-medium">Bill Number:</span>
+                                                <span class="ml-2 text-gray-700"><t t-esc="bill['name']"/></span>
+                                            </p>
+                                            <p class="flex items-center">
+                                                <i class="fas fa-user mr-2 text-primary"></i>
+                                                <span class="font-medium">Customer:</span>
+                                                <span class="ml-2 text-gray-700"><t
+                                                        t-esc="bill['customer_name']"/></span>
+                                            </p>
+                                            <p class="flex items-center">
+                                                <i class="fas fa-tachometer-alt mr-2 text-primary"></i>
+                                                <span class="font-medium">Meter ID:</span>
+                                                <span class="ml-2 text-gray-700"><t t-esc="bill['meter_id']"/></span>
+                                            </p>
+                                            <p class="flex items-center">
+                                                <i class="fas fa-calendar-alt mr-2 text-primary"></i>
+                                                <span class="font-medium">Invoice Date:</span>
+                                                <span class="ml-2 text-gray-700"><t
+                                                        t-esc="bill['invoice_date']"/></span>
+                                            </p>
+                                            <p class="flex items-center">
+                                                <i class="fas fa-calendar-check mr-2 text-primary"></i>
+                                                <span class="font-medium">Billing Month:</span>
+                                                <span class="ml-2 text-gray-700"><t
+                                                        t-esc="bill['billing_month']"/></span>
+                                            </p>
+                                            <p class="flex items-center">
+                                                <i class="fas fa-dollar-sign mr-2 text-primary"></i>
+                                                <span class="font-medium">Amount:</span>
+                                                <span class="ml-2 text-gray-700"><t
+                                                        t-esc="'${:,.2f}'.format(bill['total_bill_amount'])"/></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Meter Image -->
+                                <div>
+                                    <h2 class="text-xl font-semibold text-primary">Meter Image</h2>
+                                    <t t-if="bill['meter_image']">
+                                        <div class="mt-3">
+                                            <img t-att-src="bill['meter_image']" alt="Meter Image"
+                                                 class="w-full h-auto rounded-lg shadow-md"/>
+                                        </div>
+                                    </t>
+                                    <t t-else="">
+                                        <div class="mt-3 text-gray-500 text-center">
+                                            <i class="fas fa-image text-3xl mb-2"></i>
+                                            <p>No meter image available</p>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="mt-6 flex justify-center space-x-4">
+                                <a t-att-href="'/bill/pdf/%s' % bill['id']"
+                                   style="text-decoration: none;"
+                                   class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition flex items-center"
+                                   onmouseover="this.style.textDecoration='none';"
+                                   onmouseout="this.style.textDecoration='none';">
+                                    <i class="fas fa-download mr-2"></i> Download PDF
+                                </a>
+                                <a t-att-href="'/bill/history?meter_id=%s' % bill['meter_id']"
+                                   style="text-decoration: none;"
+                                   class="bg-gray-600 text-white py-2 px-6 rounded-lg transition flex items-center"
+                                   onmouseover="this.style.textDecoration='none';"
+                                   onmouseout="this.style.textDecoration='none';">
+                                    <i class="fas fa-arrow-left mr-2"></i> Back to History
+                                </a>
+
+                            </div>
+
+                        </t>
+                        <t t-else="">
+                            <div class="text-center">
+                                <p class="text-red-500 text-lg font-medium">Bill not found</p>
+                                <a href="/bill/history"
+                                   class="mt-4 inline-block bg-gray-600 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition flex items-center">
+                                    <i class="fas fa-arrow-left mr-2"></i> Back to History
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tailwind CSS and Font Awesome -->
+            <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+        </t>
+    </template>
+</odoo>

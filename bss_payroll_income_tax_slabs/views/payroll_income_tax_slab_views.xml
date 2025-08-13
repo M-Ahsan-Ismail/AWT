@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="tax_slab_form_view" model="ir.ui.view">
+            <field name="name">tax.slab.form</field>
+            <field name="model">tax.slab</field>
+            <field name="arch" type="xml">
+                <form string="Tax Slab">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Enter Tax Slab Name"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group string="General Info" col="2">
+                                <field name="create_date" readonly="1" widget="datetime"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Slab Lines">
+                                <field name="tax_slab_line_ids">
+                                    <list editable="bottom">
+                                        <field name="year_start_limit" widget="monetary" width="200px"/>
+                                        <field name="year_end_limit" widget="monetary" width="200px"/>
+                                        <field name="tax_rate" widget="percentage"/>
+                                        <field name="fixed_amount" widget="monetary" sum="Total"/>
+                                    </list>
+                                </field>
+
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="tax_slab_tree_view" model="ir.ui.view">
+            <field name="name">tax.slab.tree</field>
+            <field name="model">tax.slab</field>
+            <field name="arch" type="xml">
+                <list string="Tax Slabs">
+                    <field name="name"/>
+                    <field name="create_date"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_tax_slab_kanban" model="ir.ui.view">
+            <field name="name">tax.slab.kanban</field>
+            <field name="model">tax.slab</field>
+            <field name="arch" type="xml">
+                <kanban default_order="name">
+                    <field name="name"/>
+                    <field name="slab_lines_summary"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 16px; margin: 8px;">
+                                <div style="border-bottom: 1px solid #e9ecef; padding-bottom: 8px; margin-bottom: 8px;">
+                                    <h3 style="font-size: 1.2em; color: #1a1a1a; margin: 0;"><field name="name"/></h3>
+                                </div>
+                                <div style="font-size: 0.9em; color: #555;">
+                                    <field name="slab_lines_summary" widget="html"/>
+                                </div>
+                                <div style="margin-top: 12px; text-align: right;">
+                                    <a type="open"
+                                       style="background-color: #714b67; border-radius: 4px; padding: 4px 12px; font-size: 0.85em; color: #fff; text-decoration: none; display: inline-block;"
+                                       onmouseover="this.style.backgroundColor='#8F8F8F';"
+                                       onmouseout="this.style.backgroundColor='#714B67';">View Details</a>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record id="tax_slab_search_view" model="ir.ui.view">
+            <field name="name">tax.slab.search</field>
+            <field name="model">tax.slab</field>
+            <field name="arch" type="xml">
+                <search string="Tax Slabs">
+                    <field name="name"/>
+                    <field name="create_date"/>
+
+                    <group expand="1" string="Group By">
+                        <filter string="Created Date" name="group_create_date" context="{'group_by': 'create_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="tax_slab_act_window" model="ir.actions.act_window">
+            <field name="name">Tax Slabs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tax.slab</field>
+            <field name="view_mode">list,form,kanban</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There are no tax slabs defined. Click here to create one.
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+                name="Income Tax Slabs"
+                id="tax_slab_parent_menu"
+                parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
+                sequence="15"/>
+
+        <menuitem
+                name="Income Tax Slabs"
+                id="tax_slab_child_menu"
+                parent="tax_slab_parent_menu"
+                sequence="1"
+                action="tax_slab_act_window"/>
+    </data>
+</odoo>
